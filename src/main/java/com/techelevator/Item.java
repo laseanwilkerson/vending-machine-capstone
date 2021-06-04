@@ -27,7 +27,7 @@ public abstract class Item {
     public int getItemCount() { return itemCount; }
 
     public String toString() {
-        return getSlotNum() + " " + getName() + " " + getPrice() + " " + getItemCount();
+        return getSlotNum() + " | " + getName() + " | " + getPrice() + " | " + getItemCount();
     }
 
     public abstract String getMessage();
