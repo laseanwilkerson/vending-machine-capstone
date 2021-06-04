@@ -17,6 +17,13 @@ public class VendingMachineCLI {
 	private static final String MAIN_MENU_OPTION_EXIT = "EXIT";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT };
 
+	//Purchase menu functions
+	private static final String PURCHASE_MAIN_OPTION_FEED_MONEY = "Feed Money";
+	private static final String PURCHASE_MAIN_OPTION_PURCHASE = "Select Product";
+	private static final String PURCHASE_MAIN_OPTION_FINISH = "Finish Transaction";
+	private static final String [] PURCHASE_MENU_OPTION = {PURCHASE_MAIN_OPTION_FEED_MONEY,PURCHASE_MAIN_OPTION_PURCHASE,PURCHASE_MAIN_OPTION_FINISH};
+
+
 	private Menu menu;
 
 	public VendingMachineCLI(Menu menu) {
@@ -77,6 +84,32 @@ public class VendingMachineCLI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void feedMe(){
+		Scanner scan = new Scanner(System.in);
+		int amount;
+		double currentBalance = 0.00;
+		String  x = "Y";
+		while(x != "N") {
+			System.out.println("How much are you entering");
+			amount = scan.nextInt();
+			if (amount == 1) {
+				currentBalance += amount;
+			} else if (amount == 2) {
+				currentBalance += amount;
+			} else if (amount == 5) {
+				currentBalance += amount;
+			} else if (amount == 10) {
+				currentBalance += amount;
+			}
+			System.out.println("Do you want to enter another amount (Y/N)");
+			x = scan.nextLine();
+		}
+		System.out.println("Current Money Provided: $"+currentBalance);
+	}
+	//Purchase
+	public void SelecProduct(){
 	}
 
 	public void getInventory() {
