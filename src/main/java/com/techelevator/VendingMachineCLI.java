@@ -25,7 +25,7 @@ public class VendingMachineCLI {
 
 	public void run() {
 
-	getVendingMachingStocked();
+	getVendingMachineStocked();
 
 
 		while (true) {
@@ -48,8 +48,8 @@ public class VendingMachineCLI {
 		cli.run();
 	}
 
-	private void getVendingMachingStocked() {
-		String path = "src/test/resources/test.txt";
+	private void getVendingMachineStocked() {
+		String path = "vendingmachine.csv";
 		File inputFile = new File(path);
 		try (Scanner inputScanner = new Scanner(inputFile)) {
 			while (inputScanner.hasNextLine()) {
@@ -76,8 +76,12 @@ public class VendingMachineCLI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void getInventory() {
 		for(String key : inventory.keySet()) {
-			System.out.println(inventory.get(key));
+			System.out.println(inventory.get(key).toString());
 		}
 	}
+
 }

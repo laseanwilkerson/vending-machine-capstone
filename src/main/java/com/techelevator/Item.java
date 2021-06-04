@@ -11,14 +11,11 @@ public abstract class Item {
 
     public Item (String slotNum, String name, double price) {
         this.slotNum = slotNum;
+        this.name = name;
+        this.price = price;
         this.itemCount = 5;
     }
 
-
-
-//    public String toString() {
-//        return getName() + getSlotNum();
-//    }
 
 
     public String getSlotNum() { return slotNum; }
@@ -28,6 +25,10 @@ public abstract class Item {
     public double getPrice() { return price; }
 
     public int getItemCount() { return itemCount; }
+
+    public String toString() {
+        return getSlotNum() + " " + getName() + " " + getPrice() + " " + getItemCount();
+    }
 
     public abstract String getMessage();
 
