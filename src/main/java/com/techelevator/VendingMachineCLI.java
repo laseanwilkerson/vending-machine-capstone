@@ -153,7 +153,7 @@ public class VendingMachineCLI {
 			} else {
 				//Grabs the items
 				Item item = inventory.get(userInput);
-				//Check to see if blance is greater than 0
+				//Check to see if balance is greater than 0
 				if (item.getItemCount() > 0) {
 					//Check to see if the current price is enough to make the purchase
 					if (getCurrentBalance() >= item.getPrice()) {
