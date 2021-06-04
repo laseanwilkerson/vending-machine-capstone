@@ -12,8 +12,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class VendingMachineCLI {
+
+
 	//Creating the map
 	private Map<String, Item> inventory = new HashMap<>();
+	private Menu menu;
+	private double currentBalance = 0.00;
 	String destinationFile = "src/test/resources/Log.txt";
 	File destination = new File(destinationFile);
 	String currentDateTime = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa").format(new Date());
@@ -27,8 +31,9 @@ public class VendingMachineCLI {
 	private static final String PURCHASE_MENU_OPTION_SELECT_PRODUCT = "Select Product";
 	private static final String PURCHASE_MENU_OPTION_FINISH = "Finish Transaction";
 	private static final String [] PURCHASE_MENU_OPTION = { PURCHASE_MENU_OPTION_FEED_MONEY,PURCHASE_MENU_OPTION_SELECT_PRODUCT,PURCHASE_MENU_OPTION_FINISH };
-	private Menu menu;
-	private double currentBalance = 0.00;
+
+
+
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
 	}
@@ -57,7 +62,21 @@ public class VendingMachineCLI {
 			}
 		}
 	}
+
 	public static void main(String[] args) {
+
+
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+		System.out.println("$$$$$$$$$$                     VENDO-MATIC 800                         $$$$$$$$$$");
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+		System.out.println("                                                                                 ");
+		System.out.println("                      WE ARE HERE TO SAVE YOUR HUNGRY SOUL!                      ");
+		System.out.println("                            P.S.BUT IT AIN'T FREE                                ");
+		System.out.println("                                                            Umbrella Corp        ");
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
+
+
 		Menu menu = new Menu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 		cli.run();
@@ -180,12 +199,15 @@ public class VendingMachineCLI {
 			System.out.println("Your balance is $0. Please add money first!");
 		}
 	}
+
 	public double getCurrentBalance() {
 		return currentBalance;
 	}
+
 	public void displayInventory() {
 		for(String key : inventory.keySet()) {
 			System.out.println(inventory.get(key).toString());
 		}
 	}
+
 }
