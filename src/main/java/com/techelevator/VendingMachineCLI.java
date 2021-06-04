@@ -1,9 +1,11 @@
 package com.techelevator;
 
+import com.sun.source.util.SourcePositions;
 import com.techelevator.view.Menu;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,16 +20,18 @@ public class VendingMachineCLI {
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT };
 
 	//Purchase menu functions
-	private static final String PURCHASE_MAIN_OPTION_FEED_MONEY = "Feed Money";
-	private static final String PURCHASE_MAIN_OPTION_PURCHASE = "Select Product";
-	private static final String PURCHASE_MAIN_OPTION_FINISH = "Finish Transaction";
-	private static final String [] PURCHASE_MENU_OPTION = {PURCHASE_MAIN_OPTION_FEED_MONEY,PURCHASE_MAIN_OPTION_PURCHASE,PURCHASE_MAIN_OPTION_FINISH};
+	private static final String PURCHASE_MENU_OPTION_FEED_MONEY = "Feed Money";
+	private static final String PURCHASE_MENU_OPTION_SELECT_PRODUCT = "Select Product";
+	private static final String PURCHASE_MENU_OPTION_FINISH = "Finish Transaction";
+	private static final String [] PURCHASE_MENU_OPTION = { PURCHASE_MENU_OPTION_FEED_MONEY,PURCHASE_MENU_OPTION_SELECT_PRODUCT,PURCHASE_MENU_OPTION_FINISH };
 
 
 	private Menu menu;
+	private double currentBalance = 0.00;
 
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
+
 	}
 
 	public void run() {
@@ -40,9 +44,25 @@ public class VendingMachineCLI {
 
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
 				getInventory();
-				// display vending machine items
+
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
-				// do purchase
+				while(true) {
+					String choicePurchase = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTION);
+
+					if (choicePurchase.equals(PURCHASE_MENU_OPTION_FEED_MONEY)) {
+						feedMe();
+
+					} else if (choicePurchase.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
+
+						//SELECT PRODUCT
+
+					} else if (choicePurchase.equals(PURCHASE_MENU_OPTION_FINISH)) {
+						System.out.println("Thank you! Come back soon!");
+						System.exit(1);
+					}
+
+				}
+
 			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
 				System.out.println("Thank you! Come back soon!");
 				System.exit(1);
@@ -89,33 +109,49 @@ public class VendingMachineCLI {
 	public void feedMe(){
 		Scanner scan = new Scanner(System.in);
 		int amount;
-		double currentBalance = 0.00;
+		int amountProvided = 0;
 		String  x = "Y";
-		while(x != "N") {
+
+		while(!x.equals("0")) {
+			System.out.println("Current Balance: $" + currentBalance);
 			System.out.println("How much are you entering");
 			amount = scan.nextInt();
 			if (amount == 1) {
-				currentBalance += amount;
+				currentBalance = getCurrentBalance() + amount;
 			} else if (amount == 2) {
-				currentBalance += amount;
+				currentBalance = getCurrentBalance() + amount;
 			} else if (amount == 5) {
-				currentBalance += amount;
+				currentBalance = getCurrentBalance() + amount;
 			} else if (amount == 10) {
-				currentBalance += amount;
+				currentBalance = getCurrentBalance() + amount;
+			} else {
+				System.out.println("You have provided unacceptable amount! We only accept $1, $2, $5 or $10!");
 			}
-			System.out.println("Do you want to enter another amount (Y/N)");
-			x = scan.nextLine();
+
+			Scanner answer = new Scanner(System.in);
+			System.out.println("Press 0 to return to menu or any key to add more money");
+			x = answer.nextLine();
+			amountProvided += amount;
 		}
-		System.out.println("Current Money Provided: $"+currentBalance);
+		System.out.println("Current Money Provided: $" + amountProvided);
+		System.out.println("Current Balance: $" + currentBalance);
 	}
 	//Purchase
-	public void SelecProduct(){
+	public void SelectProduct(){
+
+	}
+
+	public double getCurrentBalance() {
+		return currentBalance;
 	}
 
 	public void getInventory() {
 		for(String key : inventory.keySet()) {
 			System.out.println(inventory.get(key).toString());
 		}
+
+
+
 	}
 
 }

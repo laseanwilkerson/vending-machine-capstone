@@ -26,6 +26,8 @@ public abstract class Item {
 
     public int getItemCount() { return itemCount; }
 
+    public void setItemCount(int itemCount) { this.itemCount = itemCount; }
+
     public String toString() {
         return getSlotNum() + " | " + getName() + " | " + getPrice() + " | " + getItemCount();
     }
