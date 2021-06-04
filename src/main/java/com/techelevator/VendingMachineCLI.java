@@ -1,81 +1,67 @@
 package com.techelevator;
 
-import com.sun.source.util.SourcePositions;
 import com.techelevator.view.Menu;
-
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLOutput;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class VendingMachineCLI {
-
-	private Map<String, Object> inventory = new HashMap<String, Object>();
+	//Creating the map
+	private Map<String, Item> inventory = new HashMap<>();
+	String destinationFile = "src/test/resources/Log.txt";
+	File destination = new File(destinationFile);
+	String currentDateTime = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa").format(new Date());
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
 	private static final String MAIN_MENU_OPTION_EXIT = "EXIT";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT };
-
 	//Purchase menu functions
 	private static final String PURCHASE_MENU_OPTION_FEED_MONEY = "Feed Money";
 	private static final String PURCHASE_MENU_OPTION_SELECT_PRODUCT = "Select Product";
 	private static final String PURCHASE_MENU_OPTION_FINISH = "Finish Transaction";
 	private static final String [] PURCHASE_MENU_OPTION = { PURCHASE_MENU_OPTION_FEED_MONEY,PURCHASE_MENU_OPTION_SELECT_PRODUCT,PURCHASE_MENU_OPTION_FINISH };
-
-
 	private Menu menu;
 	private double currentBalance = 0.00;
-
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
-
 	}
-
 	public void run() {
-
-	getVendingMachineStocked();
-
-
+		getVendingMachineStocked();
 		while (true) {
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
-
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
-				getInventory();
-
+				displayInventory();
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				while(true) {
 					String choicePurchase = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTION);
-
 					if (choicePurchase.equals(PURCHASE_MENU_OPTION_FEED_MONEY)) {
 						feedMe();
-
 					} else if (choicePurchase.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
-
+						selectProduct();
 						//SELECT PRODUCT
-
 					} else if (choicePurchase.equals(PURCHASE_MENU_OPTION_FINISH)) {
 						System.out.println("Thank you! Come back soon!");
 						System.exit(1);
 					}
-
 				}
-
 			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
 				System.out.println("Thank you! Come back soon!");
 				System.exit(1);
 			}
 		}
 	}
-
 	public static void main(String[] args) {
 		Menu menu = new Menu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 		cli.run();
 	}
-
 	private void getVendingMachineStocked() {
 		String path = "vendingmachine.csv";
 		File inputFile = new File(path);
@@ -105,53 +91,101 @@ public class VendingMachineCLI {
 			e.printStackTrace();
 		}
 	}
-
 	public void feedMe(){
 		Scanner scan = new Scanner(System.in);
-		int amount;
+		String amountInput;
 		int amountProvided = 0;
-		String  x = "Y";
-
+		String  x = "";
+		double reportBalance = currentBalance;
 		while(!x.equals("0")) {
-			System.out.println("Current Balance: $" + currentBalance);
-			System.out.println("How much are you entering");
-			amount = scan.nextInt();
-			if (amount == 1) {
-				currentBalance = getCurrentBalance() + amount;
-			} else if (amount == 2) {
-				currentBalance = getCurrentBalance() + amount;
-			} else if (amount == 5) {
-				currentBalance = getCurrentBalance() + amount;
-			} else if (amount == 10) {
-				currentBalance = getCurrentBalance() + amount;
-			} else {
+
+			try {
+				System.out.println("Current Balance: $" + currentBalance);
+				System.out.println("How much are you entering");
+				amountInput = scan.nextLine();
+				Double amount = Double.valueOf(amountInput);
+				if (amount == 1) {
+					currentBalance = getCurrentBalance() + amount;
+					amountProvided += amount;
+					String reportAmount1 = "$1";
+				} else if (amount == 2) {
+					currentBalance = getCurrentBalance() + amount;
+					amountProvided += amount;
+				} else if (amount == 5) {
+					currentBalance = getCurrentBalance() + amount;
+					amountProvided += amount;
+				} else if (amount == 10) {
+					currentBalance = getCurrentBalance() + amount;
+					amountProvided += amount;
+				} else {
+					System.out.println("You have provided unacceptable amount! We only accept $1, $2, $5 or $10!");
+				}
+				System.out.println("Current Balance is: $ " + currentBalance);
+				Scanner answer = new Scanner(System.in);
+				System.out.println("Press 0 to return to menu or any key to add more money");
+				x = answer.nextLine();
+			} catch (NumberFormatException ex) {
 				System.out.println("You have provided unacceptable amount! We only accept $1, $2, $5 or $10!");
 			}
-
-			Scanner answer = new Scanner(System.in);
-			System.out.println("Press 0 to return to menu or any key to add more money");
-			x = answer.nextLine();
-			amountProvided += amount;
 		}
 		System.out.println("Current Money Provided: $" + amountProvided);
 		System.out.println("Current Balance: $" + currentBalance);
-	}
-	//Purchase
-	public void SelectProduct(){
-
-	}
-
-	public double getCurrentBalance() {
-		return currentBalance;
-	}
-
-	public void getInventory() {
-		for(String key : inventory.keySet()) {
-			System.out.println(inventory.get(key).toString());
+		try {
+			PrintWriter writer = new PrintWriter(new FileWriter(destination, true));
+			writer.println(currentDateTime + " FEED MONEY: $" + reportBalance + " $" + currentBalance);
+			writer.flush();
+		} catch(IOException e) {
+			System.out.println("There is an error: " + e);
 		}
 
 
-
 	}
-
+	//Purchasing
+	public void selectProduct(){
+		if (currentBalance > 0) {
+			displayInventory();
+			Scanner scan = new Scanner(System.in);
+			String userInput = "";
+			System.out.println("Please enter a slot number");
+			userInput = scan.nextLine();
+			if (!inventory.containsKey(userInput)) {
+				System.out.println("Invalid slot number");
+			} else {
+				//Grabs the items
+				Item item = inventory.get(userInput);
+				//Check to see if blance is greater than 0
+				if (item.getItemCount() > 0) {
+					//Check to see if the current price is enough to make the purchase
+					if (getCurrentBalance() >= item.getPrice()) {
+						currentBalance -= item.getPrice();
+						System.out.println(item.getMessage());
+						System.out.print(item.getName() + " | " + item.getPrice() + " | " + "Your remaining balance is: $");
+						System.out.printf(" %.2f", currentBalance);
+						System.out.println(" ");
+						try {
+							PrintWriter writer = new PrintWriter(new FileWriter(destination, true));
+							writer.println(">" + currentDateTime + " " + item.getName() + " " + item.getSlotNum() + " $" + item.getPrice());
+							writer.flush();
+						} catch(IOException e) {
+							System.out.println("There is an error: " + e);
+						}
+					} else {
+						System.out.println("Not enough money");
+					}
+				} else {
+					System.out.println("This product is sold out");
+				}
+			}
+		}else {
+			System.out.println("Your balance is $0. Please add money first!");
+		}
+	}
+	public double getCurrentBalance() {
+		return currentBalance;
+	}
+	public void displayInventory() {
+		for(String key : inventory.keySet()) {
+			System.out.println(inventory.get(key).toString());
+		}
+	}
 }
