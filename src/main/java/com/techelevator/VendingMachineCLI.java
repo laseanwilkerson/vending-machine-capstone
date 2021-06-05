@@ -5,14 +5,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class VendingMachineCLI {
 
+public class VendingMachineCLI {
 
 	//Creating the map
 	private Map<String, Item> inventory = new HashMap<>();
@@ -22,6 +23,7 @@ public class VendingMachineCLI {
 	File destination = new File(destinationFile);
 	String currentDateTime = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa").format(new Date());
 
+	//Main menu options
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
 	private static final String MAIN_MENU_OPTION_EXIT = "EXIT";
@@ -31,12 +33,11 @@ public class VendingMachineCLI {
 	private static final String PURCHASE_MENU_OPTION_SELECT_PRODUCT = "Select Product";
 	private static final String PURCHASE_MENU_OPTION_FINISH = "Finish Transaction";
 	private static final String [] PURCHASE_MENU_OPTION = { PURCHASE_MENU_OPTION_FEED_MONEY,PURCHASE_MENU_OPTION_SELECT_PRODUCT,PURCHASE_MENU_OPTION_FINISH };
-
-
-
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
 	}
+
+
 	public void run() {
 		getVendingMachineStocked();
 		while (true) {
@@ -52,8 +53,8 @@ public class VendingMachineCLI {
 						selectProduct();
 						//SELECT PRODUCT
 					} else if (choicePurchase.equals(PURCHASE_MENU_OPTION_FINISH)) {
-						System.out.println("Thank you! Come back soon!");
-						System.exit(1);
+						finishTransaction();
+						// menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 					}
 				}
 			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
@@ -64,8 +65,6 @@ public class VendingMachineCLI {
 	}
 
 	public static void main(String[] args) {
-
-
 		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		System.out.println("$$$$$$$$$$                     VENDO-MATIC 800                         $$$$$$$$$$");
 		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
@@ -74,13 +73,11 @@ public class VendingMachineCLI {
 		System.out.println("                            P.S.BUT IT AIN'T FREE                                ");
 		System.out.println("                                                            Umbrella Corp        ");
 		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
-
-
 		Menu menu = new Menu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 		cli.run();
 	}
+
 	private void getVendingMachineStocked() {
 		String path = "vendingmachine.csv";
 		File inputFile = new File(path);
@@ -110,6 +107,7 @@ public class VendingMachineCLI {
 			e.printStackTrace();
 		}
 	}
+
 	public void feedMe(){
 		Scanner scan = new Scanner(System.in);
 		String amountInput;
@@ -117,7 +115,6 @@ public class VendingMachineCLI {
 		String  x = "";
 		double reportBalance = currentBalance;
 		while(!x.equals("0")) {
-
 			try {
 				System.out.println("Current Balance: $" + currentBalance);
 				System.out.println("How much are you entering");
@@ -156,9 +153,8 @@ public class VendingMachineCLI {
 		} catch(IOException e) {
 			System.out.println("There is an error: " + e);
 		}
-
-
 	}
+
 	//Purchasing
 	public void selectProduct(){
 		if (currentBalance > 0) {
@@ -200,6 +196,38 @@ public class VendingMachineCLI {
 		}
 	}
 
+	//Finish Transaction Method
+	public void finishTransaction(){
+
+		double remainingBalance = currentBalance;
+		//converts double in 2 decimal places
+		DecimalFormat df2 = new DecimalFormat("#.##");
+		//Returns the customer balancer back in coins
+		int quarters = (int)(currentBalance/.25);
+		currentBalance %= .25;
+		int dimes = (int)(currentBalance/.10);
+		currentBalance %= .1;
+		int nickles = (int)(currentBalance/.05);
+
+		//Prints the customers change back in coins
+		System.out.println("Quarters: " + quarters);
+		System.out.println("Dimes: " + dimes);
+		System.out.println("Nickles: " + nickles);
+
+		currentBalance = 0.00;//Return the current balance to 0.00
+		System.out.println("Current Balance: $"+currentBalance);
+
+		try {
+			PrintWriter writer = new PrintWriter(new FileWriter(destination, true));
+			writer.println(">" + currentDateTime + " " + "GIVE CHANGE: $" + df2.format(remainingBalance) + " $" + currentBalance);
+			writer.flush();
+		} catch(IOException e) {
+			System.out.println("There is an error: " + e);
+		}
+
+
+	}
+
 	public double getCurrentBalance() {
 		return currentBalance;
 	}
@@ -211,3 +239,17 @@ public class VendingMachineCLI {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
