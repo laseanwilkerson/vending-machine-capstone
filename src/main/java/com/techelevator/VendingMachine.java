@@ -15,7 +15,6 @@ import java.util.Scanner;
 public class VendingMachine {
 
     private Map<String, Item> inventory = new HashMap<>();
-    private Menu menu;
     private double currentBalance = 0.00;
     private String destinationFile = "src/test/resources/Log.txt";
     private File destination = new File(destinationFile);
@@ -72,7 +71,6 @@ public class VendingMachine {
                 if (amount == 1) {
                     currentBalance = getCurrentBalance() + amount;
                     amountProvided += amount;
-                    String reportAmount1 = "$1";
                 } else if (amount == 2) {
                     currentBalance = getCurrentBalance() + amount;
                     amountProvided += amount;

@@ -54,7 +54,7 @@ public class VendingMachineCLI {
 						//SELECT PRODUCT
 					} else if (choicePurchase.equals(PURCHASE_MENU_OPTION_FINISH)) {
 						finishTransaction();
-						// menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
+						break;
 					}
 				}
 			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
@@ -123,7 +123,6 @@ public class VendingMachineCLI {
 				if (amount == 1) {
 					currentBalance = getCurrentBalance() + amount;
 					amountProvided += amount;
-					String reportAmount1 = "$1";
 				} else if (amount == 2) {
 					currentBalance = getCurrentBalance() + amount;
 					amountProvided += amount;
