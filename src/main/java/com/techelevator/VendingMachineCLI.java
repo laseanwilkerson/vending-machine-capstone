@@ -141,7 +141,8 @@ public class VendingMachineCLI {
 			try {
 				System.out.println("-----------------------------------------------------------------------------");
 				System.out.println("                 Current Balance: $" + currentBalance);
-				System.out.println("                 How much are you entering");
+				System.out.println("                 Please provide $1, $2, $5 or $10 bill");
+				System.out.println("                 that you want to add to the balance!");
 				System.out.println("-----------------------------------------------------------------------------");
 				amountInput = scan.nextLine();
 				Double amount = Double.valueOf(amountInput);
@@ -192,16 +193,17 @@ public class VendingMachineCLI {
 	//Purchasing
 	public void selectProduct(){
 		if (currentBalance > 0) {
+			System.out.println("-----------------------------------------------------------------------------");
 			displayInventory();
 			Scanner scan = new Scanner(System.in);
 			String userInput = "";
 			System.out.println("-----------------------------------------------------------------------------");
-			System.out.println("                       Please enter a slot number");
+			System.out.println("                    Please enter a slot number");
 			System.out.println("-----------------------------------------------------------------------------");
 			userInput = scan.nextLine();
 			if (!inventory.containsKey(userInput)) {
 				System.out.println("-----------------------------------------------------------------------------");
-				System.out.println("                        Invalid slot number");
+				System.out.println("                     Invalid slot number");
 				System.out.println("-----------------------------------------------------------------------------");
 			} else {
 				//Grabs the items
@@ -211,7 +213,8 @@ public class VendingMachineCLI {
 					//Check to see if the current price is enough to make the purchase
 					if (getCurrentBalance() >= item.getPrice()) {
 						currentBalance -= item.getPrice();
-						System.out.println(item.getMessage());
+						System.out.println("-----------------------------------------------------------------------------");
+						System.out.println("                   " + item.getMessage());
 						System.out.println("-----------------------------------------------------------------------------");
 						System.out.print(item.getName() + " | " + item.getPrice() + " | " + "Your remaining balance is: $");
 						System.out.printf(" %.2f", currentBalance);
