@@ -42,7 +42,7 @@ public class VendingMachineTest {
         Drink drink = new Drink ("C4", "Heavy", 1.5);
         expected.put("C4", drink);
         Map output = objectOutput.getVendingMachineStocked(inventoryFilePath);
-        Assert.assertEquals(expected, output);
+        Assert.assertTrue(output.get("C4").toString().equals(expected.get("C4").toString()));
 
     }
 
@@ -54,5 +54,29 @@ public class VendingMachineTest {
         Assert.assertEquals(expected, output);
 
     }
+
+    @Test
+    public void select_product_valid_slot_number(){
+        //Arrange
+        String inventoryFilePath = "src/test/resources/VM stocked test";
+        Map output = objectOutput.getVendingMachineStocked(inventoryFilePath);
+        objectOutput.setCurrentBalance(10.00);
+        //Act
+        String actual = objectOutput.selectProduct("C4");
+        String expected = "is valid";
+        Assert.assertEquals(expected, actual);
+    }
+    @Test
+    public void select_product_invalid_slot_number(){
+        //Arrange
+        String inventoryFilePath = "src/test/resources/VM stocked test";
+        Map output = objectOutput.getVendingMachineStocked(inventoryFilePath);
+        objectOutput.setCurrentBalance(10.00);
+        //Act
+        String actual = objectOutput.selectProduct("C6");
+        String expected = "Invalid slot";
+        Assert.assertEquals(expected, actual);
+    }
+
 
 }

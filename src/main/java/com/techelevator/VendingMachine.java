@@ -3,8 +3,6 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -13,7 +11,7 @@ public class VendingMachine {
 
     private Map<String, Item> inventory = new HashMap<>();
     private double currentBalance = 0.00;
-    private String currentDateTime = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa").format(new Date());
+
 
 
 
@@ -76,18 +74,14 @@ public class VendingMachine {
 
     }
 
-    public void selectProduct(){
+    public String  selectProduct(String userInput){
+        String userOutput = "";
+        Item item = inventory.get(userInput);
         if (currentBalance > 0) {
-            displayInventory();
-            Scanner scan = new Scanner(System.in);
-            String userInput = "";
-            System.out.println("Please enter a slot number");
-            userInput = scan.nextLine();
+            userOutput ="not enough";
             if (!inventory.containsKey(userInput)) {
-                System.out.println("Invalid slot number");
+                userOutput ="Invalid slot";
             } else {
-                //Grabs the items
-                Item item = inventory.get(userInput);
                 //Check to see if balance is greater than 0
                 if (item.getItemCount() > 0) {
                     //Check to see if the current price is enough to make the purchase
@@ -97,17 +91,12 @@ public class VendingMachine {
                         System.out.print(item.getName() + " | " + item.getPrice() + " | " + "Your remaining balance is: $");
                         System.out.printf(" %.2f", currentBalance);
                         System.out.println(" ");
-
-                    } else {
-                        System.out.println("Not enough money");
+                        userOutput = "is valid";
                     }
-                } else {
-                    System.out.println("This product is sold out");
                 }
             }
-        }else {
-            System.out.println("Your balance is $0. Please add money first!");
         }
+        return userOutput;
     }
 
 
@@ -116,11 +105,7 @@ public class VendingMachine {
     }
 
 
-    public void displayInventory() {
-        for(String key : inventory.keySet()) {
-            System.out.println(inventory.get(key).toString());
-        }
+    public void setCurrentBalance(double currentBalance) {
+        this.currentBalance = currentBalance;
     }
-
-
 }
