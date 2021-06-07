@@ -44,7 +44,7 @@ public class VendingMachine {
                         inventory.put(productSlot, item);
                     }
                 } else {
-                    System.out.println("This file doesn't contain products required to list!");
+                    System.out.println("This file doesn't contain required parameters!");
                     break;
                 }
             }

@@ -1,6 +1,7 @@
 package com.techelevator.view;
 
 import com.techelevator.Drink;
+import com.techelevator.Gum;
 import com.techelevator.Item;
 import com.techelevator.VendingMachine;
 import org.junit.Before;
@@ -38,12 +39,20 @@ public class VendingMachineTest {
     public void test_VM_stocked_method() {
         String inventoryFilePath = "src/test/resources/VM stocked test";
         Map <String, Item> expected = new HashMap<>();
-        Drink drink = new Drink ("C4", "Heavy", 1.50);
+        Drink drink = new Drink ("C4", "Heavy", 1.5);
         expected.put("C4", drink);
         Map output = objectOutput.getVendingMachineStocked(inventoryFilePath);
         Assert.assertEquals(expected, output);
 
     }
 
+    @Test
+    public void test_VM_stocked_method_unacceptable_input_file() {
+        String inventoryFilePath = "src/test/java/com/techelevator/view/VMstockingMethodToFail.txt";
+        Map <String, Item> expected = new HashMap<>();
+        Map output = objectOutput.getVendingMachineStocked(inventoryFilePath);
+        Assert.assertEquals(expected, output);
+
+    }
 
 }
